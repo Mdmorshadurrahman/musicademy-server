@@ -64,6 +64,22 @@ async function run(){
             const deleteSingleReviews = await reviewCollection.deleteOne(query);
             res.send(deleteSingleReviews);
         })
+        //UPDATE specific review from review collection
+        app.put('/myreviews/:id', async(req,res) =>{
+            const id = req.param.id;
+            console.log(id);
+            const filter = { _id: new ObjectId(id)};
+            const updatedMessageBox = req.body;
+            const option = {upsert: true};
+            const updateMessage = {
+                $set: {
+                    Review: updatedMessageBox
+                }
+            }
+            const updatedMessage = await reviewCollection.updateOne(filter, updateMessage, option);
+            res.send(updatedMessage);
+            console.log(updatedMessageBox);
+        })
         //POST courses to mycourses collection
         app.post('/mycourses', async(req,res) =>{
             const courseDetails = req.body;
@@ -91,6 +107,7 @@ async function run(){
             const deleteSingleCourses = await myCoursesCollection.deleteOne(query);
             res.send(deleteSingleCourses);
         })
+        
     }
     finally{
 
